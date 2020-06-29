@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         //
+
         // Try running your application with "flutter run". You'll see the
         // application has a blue toolbar. Then, without quitting the app, try
         // changing the primarySwatch below to Colors.green and then invoke
@@ -77,15 +78,16 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: ListView.separated(
-          separatorBuilder: (BuildContext context, int index) => Divider(
-            color: Colors.grey,
-          ),
-          itemCount: _todoItems.length,
-          itemBuilder: (BuildContext context, int index) => _todoItems[index]
-        ),
+            separatorBuilder: (BuildContext context, int index) => Divider(
+                  color: Colors.grey,
+                ),
+            itemCount: _todoItems.length,
+            itemBuilder: (BuildContext context, int index) =>
+                _todoItems[index]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _addTodoItem('Test', 'Test description.'),
+        onPressed: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AddTodoPage())),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
