@@ -54,12 +54,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<TodoItem> _todoItems = [];
 
-  void _addTodoItem(String title, String description) {
-    setState(() {
-      this._todoItems.add(TodoItem(title: title, description: description));
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -82,12 +76,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.grey,
                 ),
             itemCount: _todoItems.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _todoItems[index]),
+            itemBuilder: (BuildContext context, int index) => Dismissible(
+                  key: Key(
+                      _todoItems[index].title + _todoItems[index].description),
+                  onDismissed: (direction) {
+                    String itemTitle = _todoItems[index].title;
+
+                    setState(() {
+                      _todoItems.removeAt(index);
+                    });
+
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text('$itemTitle dismissed')));
+                  },
+                  child: _todoItems[index],
+                )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AddTodoPage())),
+        onPressed: () async {
+          final newTodo = await Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddTodoPage()));
+
+          setState(() {
+            _todoItems.add(newTodo);
+          });
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

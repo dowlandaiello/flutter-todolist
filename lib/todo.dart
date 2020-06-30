@@ -8,9 +8,28 @@ class TodoForm extends StatefulWidget {
   }
 }
 
+class _TodoFormData {
+  /// The title of the todo item
+  String title = '';
+
+  /// The description of the todo item
+  String description = '';
+}
+
 /// The state of a newTodo form.
 class _TodoFormState extends State<TodoForm> {
   final _formKey = GlobalKey<FormState>();
+
+  _TodoFormData _data = _TodoFormData();
+
+  /// Generates a validator for some form field.
+  final _validatorForTodoField = (String field) => (String value) {
+        if (value.isEmpty) {
+          return 'Your todo must have a $field.';
+        }
+
+        return null;
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +40,27 @@ class _TodoFormState extends State<TodoForm> {
       child: Column(
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Todo Title',
-            ),
-          ),
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Todo Title',
+              ),
+              validator: _validatorForTodoField('title'),
+              onSaved: (String value) {
+                _data.title = value;
+              }),
           TextFormField(
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Todo Description',
-            ),
-          ),
+              decoration: InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Todo Description',
+              ),
+              validator: _validatorForTodoField('description'),
+              onSaved: (String value) {
+                _data.description = value;
+              }),
           RaisedButton(
             onPressed: () {
-              Navigator.pop(context, TodoItem(title: ));
+              Navigator.pop(context,
+                  TodoItem(title: _data.title, description: _data.description));
             },
             child: Text('Create Todo'),
           )
